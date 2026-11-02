@@ -1,0 +1,8 @@
+# GraphQL Response Envelope Formatter
+
+class GraphQLFormatter:
+    def format_data(self, data_json: String) -> String:
+        return "{\"data\":" + data_json + ",\"errors\":null}"
+
+    def format_errors(self, error_message: String) -> String:
+        return "{\"data\":null,\"errors\":[{\"message\":\"" + error_message + "\"}]}"

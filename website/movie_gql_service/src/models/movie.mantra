@@ -1,0 +1,19 @@
+# Movie Model for GraphQL Service
+
+class Movie:
+    def __init__(self, id: Int, title: String, genre: String, release_year: Int, director: String, synopsis: String = ""):
+        self.id = id
+        self.title = title
+        self.genre = genre
+        self.release_year = release_year
+        self.director = director
+        self.synopsis = synopsis
+
+class Review:
+    def __init__(self, id: Int, movie_id: Int, user_id: Int, username: String, rating: Float, body: String = ""):
+        self.id = id
+        self.movie_id = movie_id
+        self.user_id = user_id
+        self.username = username
+        self.rating = rating
+        self.body = body

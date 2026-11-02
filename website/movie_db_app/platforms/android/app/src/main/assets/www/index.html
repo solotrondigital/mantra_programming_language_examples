@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <link rel="icon" type="image/png" href="../../../../../../../../../assets/images/mantra_color_logo.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMantra — Hybrid Movie Database App</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        :root {
+            --bg: #0d1117; --surface: #161b22; --border: #30363d;
+            --text: #e6edf3; --muted: #8b949e; --accent: #6366f1;
+            --green: #10b981; --pink: #ec4899; --yellow: #f59e0b;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--bg); color:var(--text); font-family:system-ui,sans-serif; min-height:100vh; }
+        header {
+            background:var(--surface); border-bottom:1px solid var(--border);
+            padding:.75rem 2rem; display:flex; align-items:center; justify-content:space-between;
+            position:sticky; top:0; z-index:100;
+        }
+        .logo { font-size:1.3rem; font-weight:800; color:#fff; display:flex; align-items:center; gap:.5rem; }
+        .logo span { color:var(--accent); }
+        .user-pill {
+            background:var(--accent); color:#fff; padding:.35rem .85rem; border-radius:20px;
+            font-size:.85rem; font-weight:600; display:none; align-items:center; gap:.4rem; cursor:pointer;
+        }
+        .user-pill.visible { display:flex; }
+        .modal-backdrop {
+            position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:200;
+            display:flex; align-items:center; justify-content:center;
+        }
+        .modal-backdrop.hidden { display:none; }
+        .modal {
+            background:var(--surface); border:1px solid var(--border); border-radius:16px;
+            padding:2.5rem; width:100%; max-width:400px;
+        }
+        .modal h2 { margin-bottom:1.5rem; font-size:1.4rem; }
+        .form-group { margin-bottom:1.25rem; }
+        .form-group label { display:block; font-size:.85rem; color:var(--muted); margin-bottom:.35rem; }
+        .form-group input {
+            width:100%; background:#0d1117; border:1px solid var(--border); border-radius:8px;
+            color:#fff; padding:.65rem .9rem; font-size:.95rem; outline:none;
+        }
+        .btn {
+            width:100%; padding:.75rem; border:none; border-radius:8px; font-size:1rem;
+            font-weight:600; cursor:pointer; background:var(--accent); color:#fff;
+        }
+        main { padding:2rem; max-width:1100px; margin:0 auto; }
+        #loginPrompt { text-align:center; padding:4rem 2rem; }
+        #moviesSection { display:none; }
+        .movies-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:1.25rem; }
+        .movie-card {
+            background:var(--surface); border:1px solid var(--border); border-radius:14px;
+            padding:1.5rem; cursor:pointer; transition:border-color .2s, transform .2s;
+        }
+        .movie-card:hover { border-color:var(--accent); transform:translateY(-3px); }
+        .movie-title { font-size:1.15rem; font-weight:700; margin-bottom:.3rem; }
+        .movie-meta { font-size:.85rem; color:var(--muted); margin-bottom:.75rem; }
+        .movie-genre {
+            display:inline-block; background:rgba(99,102,241,.15); color:var(--accent);
+            border-radius:20px; padding:.2rem .75rem; font-size:.78rem; font-weight:600;
+        }
+        .movie-rating { float:right; color:var(--yellow); font-weight:700; font-size:.95rem; }
+        .movie-synopsis { font-size:.85rem; color:var(--muted); margin-top:.75rem; line-height:1.5; }
+        .service-badge {
+            position:fixed; bottom:1.5rem; right:1.5rem;
+            background:var(--surface); border:1px solid var(--border); border-radius:12px;
+            padding:.75rem 1.25rem; font-size:.8rem; color:var(--muted);
+        }
+        .service-badge strong { color:#fff; }
+        .dot { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:.3rem; }
+        .dot.green { background:var(--green); }
+        .dot.pink { background:var(--pink); }
+    </style>
+</head>
+<body>
+    <div class="modal-backdrop" id="authBackdrop">
+        <div class="modal">
+            <h2>🎬 Sign in to CineMantra</h2>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="loginUser" placeholder="raghav">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPass" placeholder="••••••••">
+            </div>
+            <button class="btn" onclick="doLogin()">Sign In</button>
+            <p style="margin-top:1rem;font-size:.78rem;color:var(--muted)">Demo credentials: <strong>raghav</strong> / any password</p>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo">🎬 Cine<span>Mantra</span> (movie_db_app)</div>
+        <div class="user-pill" id="userPill" onclick="doLogout()">
+            <span>👤</span> <span id="pillName">raghav</span> <span style="opacity:.5;margin-left:.25rem">✕</span>
+        </div>
+    </header>
+
+    <main>
+        <div id="loginPrompt">
+            <h2>Welcome to CineMantra (movie_db_app)</h2>
+            <p style="color:var(--muted);margin-bottom:1.5rem;">Sign in to view curated movies, community ratings, and reviews.</p>
+            <button class="btn" style="max-width:200px;margin:0 auto;" onclick="openLogin()">Sign In</button>
+        </div>
+
+        <div id="moviesSection">
+            <h2 style="margin-bottom:1.25rem;">🎥 All Movies (SQLite3)</h2>
+            <div class="movies-grid" id="moviesGrid"></div>
+        </div>
+    </main>
+
+    <div class="service-badge">
+        <div><span class="dot green"></span><strong>REST</strong> :1671</div>
+        <div><span class="dot pink"></span><strong>GraphQL</strong> :1672</div>
+    </div>
+
+    <script>
+        const MOVIES = [
+            { id: 1, title: "Inception", genre: "Sci-Fi / Thriller", year: 2010, director: "Christopher Nolan", rating: 9.4, synopsis: "A thief who steals corporate secrets through dream-sharing technology." },
+            { id: 2, title: "The Dark Knight", genre: "Action / Crime", year: 2008, director: "Christopher Nolan", rating: 9.9, synopsis: "Batman raises the stakes in his war on crime against the Joker." },
+            { id: 3, title: "Interstellar", genre: "Sci-Fi / Adventure", year: 2014, director: "Christopher Nolan", rating: 9.1, synopsis: "Explorers travel through a wormhole in search of a new home for humanity." },
+            { id: 4, title: "Parasite", genre: "Thriller / Drama", year: 2019, director: "Bong Joon-ho", rating: 9.6, synopsis: "Greed and class discrimination threaten the relationship between two families." },
+            { id: 5, title: "The Shawshank Redemption", genre: "Drama", year: 1994, director: "Frank Darabont", rating: 9.8, synopsis: "Two convicts form an enduring bond, seeking solace and eventual redemption." }
+        ];
+
+        function openLogin() { document.getElementById('authBackdrop').classList.remove('hidden'); }
+        function doLogin() {
+            const u = document.getElementById('loginUser').value.trim() || 'raghav';
+            document.getElementById('pillName').textContent = u;
+            document.getElementById('userPill').classList.add('visible');
+            document.getElementById('authBackdrop').classList.add('hidden');
+            document.getElementById('loginPrompt').style.display = 'none';
+            document.getElementById('moviesSection').style.display = 'block';
+            renderMovies();
+        }
+        function doLogout() {
+            document.getElementById('userPill').classList.remove('visible');
+            document.getElementById('moviesSection').style.display = 'none';
+            document.getElementById('loginPrompt').style.display = 'block';
+        }
+        function renderMovies() {
+            const grid = document.getElementById('moviesGrid');
+            grid.innerHTML = MOVIES.map(m => `
+                <div class="movie-card">
+                    <div style="display:flex;justify-content:space-between">
+                        <div class="movie-title">${m.title}</div>
+                        <div class="movie-rating">★ ${m.rating}</div>
+                    </div>
+                    <div class="movie-meta">${m.year} · ${m.director}</div>
+                    <span class="movie-genre">${m.genre}</span>
+                    <p class="movie-synopsis">${m.synopsis}</p>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

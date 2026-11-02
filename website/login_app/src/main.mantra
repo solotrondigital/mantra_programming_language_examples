@@ -1,0 +1,45 @@
+# login_app — Entry Point
+from lib.mantra_widgets.mantra_widgets import MantraApp
+from lib.mantra_widgets.theme.theme import dark_theme
+from src.screens.home_screen import LoginScreen
+from src.state.app_state import AuthState
+from src.controllers.auth_controller import AuthController
+
+class LoginApp:
+    def __init__(self):
+        self.auth = AuthState()
+        self.controller = AuthController(self.auth)
+        self.screen = LoginScreen()
+
+    pub def start(self) -> Int:
+        print("🔐 Starting login_app — Mantra Widgets Framework")
+        print("─────────────────────────────────────────────────")
+
+        # Widget tree builds the full UI — no HTML written by developer
+        let login_ui = self.screen.build()
+
+        print("✓  EmailField      → render_web() → <input type=email ...>")
+        print("✓  PasswordField   → render_web() → <input type=password ...>")
+        print("✓  CheckboxField   → render_web() → <label><div class=mw-checkbox ...>")
+        print("✓  Button          → render_web() → <button class=mw-btn ...>")
+        print("✓  SocialButton    → render_web() → <button> + SVG brand icon")
+        print("✓  Divider         → render_web() → <div class=mw-divider>")
+        print("✓  Column / Row    → render_web() → flex container")
+        print("✓  Card            → render_web() → <div class=mw-card ...>")
+        print("✓  Badge / Chip    → render_web() → <span class=mw-badge/chip>")
+        print("✓  Icon / Heading  → render_web() → semantic HTML elements")
+        print("─────────────────────────────────────────────────")
+
+        let theme = dark_theme()
+        let app = MantraApp("login_app — Mantra Widgets", theme, login_ui)
+        let code = app.start()
+
+        print("✓  Platform: Web   → http://127.0.0.1:4300")
+        print("✓  Platform: iOS   → call .render_ios() on each widget")
+        print("✓  Platform: Android → call .render_android() on each widget")
+        print("✓  UI size: " + str(len(login_ui)) + " bytes")
+        return code
+
+def main() -> Int:
+    let app = LoginApp()
+    return app.start()

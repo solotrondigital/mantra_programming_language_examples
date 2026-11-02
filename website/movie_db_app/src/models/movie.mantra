@@ -1,0 +1,27 @@
+# CineMantra Models: Movie & Review
+
+class Movie:
+    def __init__(self, id: Int, title: String, genre: String, release_year: Int, director: String, synopsis: String, poster_url: String = ""):
+        self.id = id
+        self.title = title
+        self.genre = genre
+        self.release_year = release_year
+        self.director = director
+        self.synopsis = synopsis
+        self.poster_url = poster_url
+
+    def to_json(self) -> String:
+        return "{\"id\":" + str(self.id) + ",\"title\":\"" + self.title + "\",\"genre\":\"" + self.genre + "\",\"release_year\":" + str(self.release_year) + ",\"director\":\"" + self.director + "\",\"synopsis\":\"" + self.synopsis + "\"}"
+
+class Review:
+    def __init__(self, id: Int, movie_id: Int, user_id: Int, username: String, rating: Float, body: String, created_at: String = ""):
+        self.id = id
+        self.movie_id = movie_id
+        self.user_id = user_id
+        self.username = username
+        self.rating = rating
+        self.body = body
+        self.created_at = created_at
+
+    def to_json(self) -> String:
+        return "{\"id\":" + str(self.id) + ",\"movie_id\":" + str(self.movie_id) + ",\"username\":\"" + self.username + "\",\"rating\":" + str(self.rating) + ",\"body\":\"" + self.body + "\"}"

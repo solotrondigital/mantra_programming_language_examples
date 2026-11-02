@@ -1,0 +1,24 @@
+# API Route Definitions for CineMantra REST API
+from src.controllers.movie_controller import MovieController
+from src.controllers.user_controller import UserController
+from src.controllers.health_controller import HealthController
+
+class ApiRouter:
+    def __init__(self, movie_ctrl: MovieController, user_ctrl: UserController, health_ctrl: HealthController):
+        self.movie_ctrl = movie_ctrl
+        self.user_ctrl = user_ctrl
+        self.health_ctrl = health_ctrl
+        self.routes = []
+
+    def register_routes(self) -> Int:
+        # GET /health
+        self.routes.append("GET /health")
+        # GET /api/movies
+        self.routes.append("GET /api/movies")
+        # GET /api/movies/:id
+        self.routes.append("GET /api/movies/:id")
+        # POST /api/auth/login
+        self.routes.append("POST /api/auth/login")
+        # GET /api/auth/me
+        self.routes.append("GET /api/auth/me")
+        return len(self.routes)

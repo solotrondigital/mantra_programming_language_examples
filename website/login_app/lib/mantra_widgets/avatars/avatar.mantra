@@ -1,0 +1,28 @@
+# Mantra Widgets — Avatar
+# Circular container for initials, emoji, or profile images.
+
+pub class Avatar:
+    def __init__(self, initials: String, size: Int):
+        self._initials = initials
+        self._size = size
+        self._bg_color = "var(--mw-primary,#4f46e5)"
+        self._text_color = "#fff"
+        self._font_size = 14
+
+    pub def set_bg_color(self, color: String):
+        self._bg_color = color
+
+    pub def set_text_color(self, color: String):
+        self._text_color = color
+
+    pub def set_font_size(self, size: Int):
+        self._font_size = size
+
+    pub def render_web(self) -> String:
+        return "<div class='mw-avatar' style='width:" + str(self._size) + "px;height:" + str(self._size) + "px;border-radius:50%;background:" + self._bg_color + ";color:" + self._text_color + ";display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:" + str(self._font_size) + "px;flex-shrink:0;'>" + self._initials + "</div>"
+
+    pub def render_android(self) -> String:
+        return "<TextView android:text='" + self._initials + "' android:layout_width='" + str(self._size) + "dp' android:layout_height='" + str(self._size) + "dp' android:gravity='center' android:background='@drawable/avatar_circle' android:textColor='@android:color/white' android:textStyle='bold'/>"
+
+    pub def render_ios(self) -> String:
+        return "ZStack { Circle().fill(Color.accentColor).frame(width: " + str(self._size) + ", height: " + str(self._size) + "); Text(\"" + self._initials + "\").foregroundColor(.white).font(.system(size: " + str(self._font_size) + ", weight: .bold)) }"

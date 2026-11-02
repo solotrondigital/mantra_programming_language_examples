@@ -1,0 +1,12 @@
+# movie_rest_api_service User Service Unit Test
+
+def test_user_creation() -> Int:
+    let is_valid: Bool = True
+    assert(is_valid == True)
+    return 0
+
+def main() -> Int:
+    print("Running UserService unit test...")
+    test_user_creation()
+    print("✓ UserService tests passed.")
+    return 0

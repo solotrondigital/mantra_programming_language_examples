@@ -1,0 +1,222 @@
+# Mantra Widgets — Form Field Components
+# Developers configure fields with semantic setters. Zero HTML in screen code.
+# Supported widgets: TextField, EmailField, PasswordField, CheckboxField,
+#                    Form, ErrorMessage
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TextField — generic single-line text input
+# ─────────────────────────────────────────────────────────────────────────────
+pub class TextField:
+    def __init__(self, input_id: String):
+        self._id = input_id
+        self._label = ""
+        self._placeholder = ""
+        self._value = ""
+        self._error_id = ""
+        self._on_change = ""
+        self._icon = ""
+        self._input_type = "text"
+        self._autocomplete = "off"
+
+    pub def set_label(self, label: String):
+        self._label = label
+
+    pub def set_placeholder(self, placeholder: String):
+        self._placeholder = placeholder
+
+    pub def set_value(self, value: String):
+        self._value = value
+
+    pub def set_icon(self, icon: String):
+        self._icon = icon
+
+    pub def set_error_id(self, error_id: String):
+        self._error_id = error_id
+
+    pub def on_change(self, handler: String):
+        self._on_change = handler
+
+    pub def render_web(self) -> String:
+        mut label_html = ""
+        if len(self._label) > 0:
+            label_html = "<label class='mw-label' for='" + self._id + "'>" + self._label + "</label>"
+        mut icon_html = ""
+        if len(self._icon) > 0:
+            icon_html = "<span class='mw-input-icon'>" + self._icon + "</span>"
+        mut handler_attr = ""
+        if len(self._on_change) > 0:
+            handler_attr = " oninput='" + self._on_change + "(this.value)'"
+        let input_html = "<div class='mw-input-wrapper'>" + icon_html + "<input id='" + self._id + "' class='mw-input' type='" + self._input_type + "' placeholder='" + self._placeholder + "' autocomplete='" + self._autocomplete + "'" + handler_attr + "/></div>"
+        mut error_html = ""
+        if len(self._error_id) > 0:
+            error_html = "<div id='" + self._error_id + "' class='mw-field-error' style='display:none;'></div>"
+        return "<div class='mw-form-field'>" + label_html + input_html + error_html + "</div>"
+
+    pub def render_android(self) -> String:
+        return "<com.google.android.material.textfield.TextInputLayout android:hint='" + self._label + "' style='@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox'><com.google.android.material.textfield.TextInputEditText android:id='@+id/" + self._id + "' android:layout_width='match_parent' android:layout_height='wrap_content'/></com.google.android.material.textfield.TextInputLayout>"
+
+    pub def render_ios(self) -> String:
+        return "TextField(\"" + self._placeholder + "\", text: $" + self._id + ")"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EmailField — validates email format, shows envelope icon
+# ─────────────────────────────────────────────────────────────────────────────
+pub class EmailField:
+    def __init__(self, input_id: String):
+        self._id = input_id
+        self._label = ""
+        self._placeholder = "name@example.com"
+        self._error_id = ""
+        self._on_change = ""
+
+    pub def set_label(self, label: String):
+        self._label = label
+
+    pub def set_placeholder(self, placeholder: String):
+        self._placeholder = placeholder
+
+    pub def set_error_id(self, error_id: String):
+        self._error_id = error_id
+
+    pub def on_change(self, handler: String):
+        self._on_change = handler
+
+    pub def render_web(self) -> String:
+        mut label_html = ""
+        if len(self._label) > 0:
+            label_html = "<label class='mw-label' for='" + self._id + "'>" + self._label + "</label>"
+        mut handler_attr = ""
+        if len(self._on_change) > 0:
+            handler_attr = " oninput='" + self._on_change + "(this.value)'"
+        let input_html = "<div class='mw-input-wrapper'><span class='mw-input-icon'>✉️</span><input id='" + self._id + "' class='mw-input' type='email' placeholder='" + self._placeholder + "' autocomplete='email'" + handler_attr + "/></div>"
+        mut error_html = ""
+        if len(self._error_id) > 0:
+            error_html = "<div id='" + self._error_id + "' class='mw-field-error' style='display:none;'></div>"
+        return "<div class='mw-form-field'>" + label_html + input_html + error_html + "</div>"
+
+    pub def render_android(self) -> String:
+        return "<com.google.android.material.textfield.TextInputLayout android:hint='" + self._label + "' style='@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox'><com.google.android.material.textfield.TextInputEditText android:id='@+id/" + self._id + "' android:inputType='textEmailAddress' android:layout_width='match_parent' android:layout_height='wrap_content'/></com.google.android.material.textfield.TextInputLayout>"
+
+    pub def render_ios(self) -> String:
+        return "TextField(\"" + self._placeholder + "\", text: $" + self._id + ").keyboardType(.emailAddress).textContentType(.emailAddress)"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PasswordField — masked input, optional show/hide toggle, lock icon
+# ─────────────────────────────────────────────────────────────────────────────
+pub class PasswordField:
+    def __init__(self, input_id: String):
+        self._id = input_id
+        self._label = ""
+        self._placeholder = "••••••••"
+        self._error_id = ""
+        self._on_change = ""
+        self._toggleable = False
+
+    pub def set_label(self, label: String):
+        self._label = label
+
+    pub def set_placeholder(self, placeholder: String):
+        self._placeholder = placeholder
+
+    pub def set_error_id(self, error_id: String):
+        self._error_id = error_id
+
+    pub def set_toggleable(self, toggleable: Bool):
+        self._toggleable = toggleable
+
+    pub def on_change(self, handler: String):
+        self._on_change = handler
+
+    pub def render_web(self) -> String:
+        mut label_html = ""
+        if len(self._label) > 0:
+            label_html = "<label class='mw-label' for='" + self._id + "'>" + self._label + "</label>"
+        mut handler_attr = ""
+        if len(self._on_change) > 0:
+            handler_attr = " oninput='" + self._on_change + "(this.value)'"
+        mut toggle_html = ""
+        if self._toggleable:
+            toggle_html = "<button class='mw-input-action' onclick='togglePassword()' title='Show/hide password' type='button'>👁</button>"
+        let input_html = "<div class='mw-input-wrapper'><span class='mw-input-icon'>🔑</span><input id='" + self._id + "' class='mw-input' type='password' placeholder='" + self._placeholder + "' autocomplete='current-password'" + handler_attr + "/>" + toggle_html + "</div>"
+        mut error_html = ""
+        if len(self._error_id) > 0:
+            error_html = "<div id='" + self._error_id + "' class='mw-field-error' style='display:none;'></div>"
+        return "<div class='mw-form-field'>" + label_html + input_html + error_html + "</div>"
+
+    pub def render_android(self) -> String:
+        return "<com.google.android.material.textfield.TextInputLayout android:hint='" + self._label + "' app:passwordToggleEnabled='true' style='@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox'><com.google.android.material.textfield.TextInputEditText android:id='@+id/" + self._id + "' android:inputType='textPassword' android:layout_width='match_parent' android:layout_height='wrap_content'/></com.google.android.material.textfield.TextInputLayout>"
+
+    pub def render_ios(self) -> String:
+        return "SecureField(\"" + self._placeholder + "\", text: $" + self._id + ").textContentType(.password)"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CheckboxField — styled checkbox with label
+# ─────────────────────────────────────────────────────────────────────────────
+pub class CheckboxField:
+    def __init__(self, input_id: String):
+        self._id = input_id
+        self._label = ""
+        self._checked = False
+        self._on_change = ""
+
+    pub def set_label(self, label: String):
+        self._label = label
+
+    pub def set_checked(self, checked: Bool):
+        self._checked = checked
+
+    pub def on_change(self, handler: String):
+        self._on_change = handler
+
+    pub def render_web(self) -> String:
+        mut checked_class = ""
+        if self._checked:
+            checked_class = " mw-checkbox--checked"
+        return "<label class='mw-checkbox-label'><div class='mw-checkbox" + checked_class + "' id='" + self._id + "' onclick='" + self._on_change + "'></div><span>" + self._label + "</span></label>"
+
+    pub def render_android(self) -> String:
+        return "<CheckBox android:id='@+id/" + self._id + "' android:layout_width='wrap_content' android:layout_height='wrap_content' android:text='" + self._label + "'/>"
+
+    pub def render_ios(self) -> String:
+        return "Toggle(\"" + self._label + "\", isOn: $" + self._id + ")"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Form — wraps fields in a semantic <form> element
+# ─────────────────────────────────────────────────────────────────────────────
+pub class Form:
+    def __init__(self, form_id: String):
+        self._id = form_id
+        self._children = ""
+
+    pub def add(self, child: String):
+        self._children = self._children + child
+
+    pub def render_web(self) -> String:
+        return "<form id='" + self._id + "' class='mw-form' onsubmit='return false;'>" + self._children + "</form>"
+
+    pub def render_android(self) -> String:
+        return "<LinearLayout android:orientation='vertical' android:layout_width='match_parent' android:layout_height='wrap_content'>" + self._children + "</LinearLayout>"
+
+    pub def render_ios(self) -> String:
+        return "Form { " + self._children + " }"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ErrorMessage — hidden container for validation/global error messages
+# ─────────────────────────────────────────────────────────────────────────────
+pub class ErrorMessage:
+    def __init__(self, element_id: String):
+        self._id = element_id
+
+    pub def render_web(self) -> String:
+        return "<div id='" + self._id + "' class='mw-global-error' style='display:none;' role='alert'></div>"
+
+    pub def render_android(self) -> String:
+        return "<TextView android:id='@+id/" + self._id + "' android:layout_width='match_parent' android:layout_height='wrap_content' android:visibility='gone' android:textColor='@color/error'/>"
+
+    pub def render_ios(self) -> String:
+        return "Text(\"\").foregroundColor(.red).hidden()"

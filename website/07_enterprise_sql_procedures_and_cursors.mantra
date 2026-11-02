@@ -1,0 +1,38 @@
+# 07_enterprise_sql_procedures_and_cursors.mantra — Enterprise ORM Features
+import mantra.sql.orm.*
+
+def main() -> Int:
+    print("========================================")
+    print("Mantra SQL ORM Enterprise Adapters v0.5.0")
+    print("========================================")
+
+    # 1. Connect using OracleAdapter (or MSSQLAdapter, MongoDBAdapter, GenericDbAdapter)
+    let db = OracleAdapter("oracle://hr:secret@localhost:1521/ORCLPDB")
+    db.connect()
+
+    # 2. Call Stored Procedure with bi-directional IN / OUT parameters
+    print("[1] Executing stored procedure: calculate_bonus")
+    let params = [
+        ProcedureParam("p_emp_id", FieldValue.Int(1042), ParamDirection.In),
+        ProcedureParam("p_bonus_rate", FieldValue.Float(0.15), ParamDirection.In),
+        ProcedureParam("p_bonus_payout", FieldValue.Null, ParamDirection.Out)
+    ]
+    let result = db.execute_procedure("calculate_bonus", params)
+    print("Bonus calculation completed. Rows affected: " + str(result.rows_affected))
+
+    # 3. Stream data using scrollable Database Cursors
+    print("\n[2] Opening database cursor: emp_scroll_cursor")
+    let cursor = db.open_cursor("emp_scroll_cursor", "SELECT id, name, department FROM employees")
+    let batch = cursor.fetch_many(10)
+    print("Fetched batch of " + str(len(batch)) + " records from cursor.")
+    cursor.close()
+
+    # 4. Create and refresh Materialized Views
+    print("\n[3] Managing Materialized Views")
+    db.create_view("active_staff_mv", "SELECT * FROM employees WHERE status = 'ACTIVE'", true)
+    db.refresh_materialized_view("active_staff_mv")
+    print("Materialized view refreshed successfully.")
+
+    db.disconnect()
+    return 0
+

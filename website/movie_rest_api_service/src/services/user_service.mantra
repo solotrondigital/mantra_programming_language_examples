@@ -1,0 +1,14 @@
+# User Business Service
+
+class UserService:
+    def __init__(self):
+        self.total_users = 1
+
+    def find_by_id(self, id: String) -> String:
+        return "User found: " + id
+
+    def validate_and_create(self, name: String, email: String) -> Bool:
+        if len(name) == 0:
+            return False
+        self.total_users = self.total_users + 1
+        return True

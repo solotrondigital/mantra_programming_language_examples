@@ -1,0 +1,8 @@
+# GraphQL User Object Type Definition
+
+class UserType:
+    def __init__(self):
+        self.type_name = "User"
+
+    def describe(self) -> String:
+        return "type User { id: ID!, name: String!, email: String! }"

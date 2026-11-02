@@ -1,0 +1,15 @@
+[project]
+name = "nehapp"
+org = "com.nehapp"
+version = "0.1.0"
+type = "frontend"
+description = "nehapp cross-platform application"
+entry = "src/main.mantra"
+
+[platforms]
+ios = "platforms/ios"
+android = "platforms/android"
+web = "platforms/web"
+
+[dependencies]
+"mantra.web" = "0.5.0"

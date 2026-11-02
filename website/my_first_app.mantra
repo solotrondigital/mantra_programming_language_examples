@@ -1,0 +1,17 @@
+# my_first_app.mantra
+
+def main() -> Int:
+    print("========================================")
+    print("     Mantra is Installed & Working! 🚀   ")
+    print("========================================")
+
+    let name = "Developer"
+    print("Welcome, " + name + "! Ready to write code.")
+
+    # Simple loop and arithmetic
+    mut n = 1
+    while n <= 3:
+        print("Count: " + str(n) + " - Mantra is blazing fast!")
+        n = n + 1
+
+    return 0

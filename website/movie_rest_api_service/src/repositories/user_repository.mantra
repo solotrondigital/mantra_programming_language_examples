@@ -1,0 +1,12 @@
+# User Persistence Repository
+
+class UserRepository:
+    def __init__(self):
+        self.record_count = 0
+
+    def save(self, user_id: String) -> Bool:
+        self.record_count = self.record_count + 1
+        return True
+
+    def find(self, user_id: String) -> Bool:
+        return True

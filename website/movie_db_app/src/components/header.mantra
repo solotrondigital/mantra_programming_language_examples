@@ -1,0 +1,9 @@
+# Application Header Bar Component
+
+class Header:
+    def __init__(self, title: String):
+        self.title = title
+        self.show_back = False
+
+    def render(self) -> String:
+        return "<header><title>" + self.title + "</title></header>"

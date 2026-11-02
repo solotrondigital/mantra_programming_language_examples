@@ -1,0 +1,39 @@
+# Mantra Widgets — Badge and Chip
+# Badge: colored pill label (status, version, count)
+# Chip:  interactive tag (platform pill, filter, category)
+
+pub class Badge:
+    def __init__(self, label: String, color: String):
+        self._label = label
+        self._color = color
+
+    pub def render_web(self) -> String:
+        return "<span class='mw-badge' style='background:" + self._color + ";color:#fff;font-size:11px;font-weight:700;padding:3px 10px;border-radius:9999px;display:inline-flex;align-items:center;gap:4px;letter-spacing:0.02em;'>" + self._label + "</span>"
+
+    pub def render_android(self) -> String:
+        return "<TextView android:text='" + self._label + "' android:background='@drawable/badge_bg' android:textColor='@android:color/white' android:textSize='11sp' android:paddingHorizontal='8dp' android:paddingVertical='2dp'/>"
+
+    pub def render_ios(self) -> String:
+        return "Text(\"" + self._label + "\").font(.caption).fontWeight(.bold).foregroundColor(.white).padding(.horizontal, 10).padding(.vertical, 3).background(Color.accentColor).cornerRadius(9999)"
+
+
+pub class Chip:
+    def __init__(self, label: String, color: String):
+        self._label = label
+        self._color = color
+        self._on_click = ""
+
+    pub def on_click(self, handler: String):
+        self._on_click = handler
+
+    pub def render_web(self) -> String:
+        mut click_attr = ""
+        if len(self._on_click) > 0:
+            click_attr = " onclick='" + self._on_click + "' style='cursor:pointer;'"
+        return "<span class='mw-chip'" + click_attr + " style='display:inline-flex;align-items:center;padding:5px 14px;border-radius:9999px;background:rgba(79,70,229,0.12);border:1px solid " + self._color + ";color:" + self._color + ";font-size:13px;font-weight:600;'>" + self._label + "</span>"
+
+    pub def render_android(self) -> String:
+        return "<com.google.android.material.chip.Chip android:text='" + self._label + "' style='@style/Widget.MaterialComponents.Chip.Choice' android:layout_width='wrap_content' android:layout_height='wrap_content'/>"
+
+    pub def render_ios(self) -> String:
+        return "Text(\"" + self._label + "\").font(.subheadline).fontWeight(.semibold).foregroundColor(.accentColor).padding(.horizontal, 14).padding(.vertical, 5).background(Color.accentColor.opacity(0.12)).cornerRadius(9999).overlay(RoundedRectangle(cornerRadius: 9999).stroke(Color.accentColor, lineWidth: 1))"

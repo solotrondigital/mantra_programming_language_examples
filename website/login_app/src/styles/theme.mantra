@@ -1,0 +1,7 @@
+# Global Theme and Styling Constants
+
+class Theme:
+    def __init__(self):
+        self.primary_color = "#6200EE"
+        self.background_color = "#FFFFFF"
+        self.text_color = "#121212"

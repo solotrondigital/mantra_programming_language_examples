@@ -1,0 +1,231 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# LoginScreen — built with mantra_widgets OOP
+# ───────────────────────────────────────────────────────────────────────────
+# ZERO HTML in this file. Every element is a widget object.
+# The framework's render_web() / render_android() / render_ios() methods
+# handle all markup generation per build target.
+# ═══════════════════════════════════════════════════════════════════════════
+
+from lib.mantra_widgets.forms.fields import EmailField
+from lib.mantra_widgets.forms.fields import PasswordField
+from lib.mantra_widgets.forms.fields import CheckboxField
+from lib.mantra_widgets.forms.fields import Form
+from lib.mantra_widgets.forms.fields import ErrorMessage
+from lib.mantra_widgets.buttons.button import Button
+from lib.mantra_widgets.buttons.social_button import SocialButton
+from lib.mantra_widgets.layout.flex import Column
+from lib.mantra_widgets.layout.flex import Row
+from lib.mantra_widgets.layout.divider import Divider
+from lib.mantra_widgets.typography.text import Text
+from lib.mantra_widgets.typography.text import Heading
+from lib.mantra_widgets.typography.text import Icon
+from lib.mantra_widgets.typography.text import Link
+from lib.mantra_widgets.cards.card import Card
+from lib.mantra_widgets.avatars.avatar import Avatar
+from lib.mantra_widgets.badges.badge import Badge
+from lib.mantra_widgets.badges.badge import Chip
+
+pub class LoginScreen:
+    def __init__(self):
+        self.title = "Sign In"
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # build() — composes the login card from widget objects
+    # Returns the platform-rendered output (web: HTML, android: XML, ios: SwiftUI)
+    # ─────────────────────────────────────────────────────────────────────────
+    pub def build(self) -> String:
+
+        # ── Logo ──────────────────────────────────────────────────────────────
+        let logo_icon = Icon("🔐", 44)
+
+        let logo_title = Heading("login_app", 1)
+
+        let logo_sub = Text("Built with Mantra Widgets  •  Cross-Platform UI")
+        logo_sub.set_muted(True)
+        logo_sub.set_size(13)
+
+        let logo = Column()
+        logo.add(logo_icon.render_web())
+        logo.add(logo_title.render_web())
+        logo.add(logo_sub.render_web())
+        logo.set_gap(6)
+        logo.set_align("center")
+
+        # ── Email Field ───────────────────────────────────────────────────────
+        let email = EmailField("email-input")
+        email.set_label("Email Address")
+        email.set_placeholder("name@example.com")
+        email.on_change("onEmailInput")
+        email.set_error_id("email-error")
+
+        # ── Password Field ────────────────────────────────────────────────────
+        let password = PasswordField("pass-input")
+        password.set_label("Password")
+        password.set_placeholder("••••••••")
+        password.on_change("onPasswordInput")
+        password.set_error_id("pass-error")
+        password.set_toggleable(True)
+
+        # ── Remember Me + Forgot Password Row ─────────────────────────────────
+        let remember = CheckboxField("rememberChk")
+        remember.set_label("Remember me")
+        remember.on_change("toggleRemember(this)")
+
+        let forgot = Link("Forgot password?", "#")
+        forgot.on_click("showForgot()")
+
+        let options = Row()
+        options.add(remember.render_web())
+        options.add(forgot.render_web())
+        options.set_justify("space-between")
+        options.set_wrap(False)
+
+        # ── Global Error Message ──────────────────────────────────────────────
+        let global_err = ErrorMessage("global-error")
+
+        # ── Sign In Button ────────────────────────────────────────────────────
+        let sign_in = Button("Sign In")
+        sign_in.set_elem_id("login-btn")
+        sign_in.set_variant("primary")
+        sign_in.on_click("handleLogin()")
+        sign_in.set_full_width(True)
+
+        # ── Divider ───────────────────────────────────────────────────────────
+        let divider = Divider("or continue with")
+
+        # ── Social Login ──────────────────────────────────────────────────────
+        let google = SocialButton("Google", "google")
+        google.on_click("handleSocialLogin(\"Google\")")
+
+        let apple = SocialButton("Apple", "apple")
+        apple.on_click("handleSocialLogin(\"Apple\")")
+
+        let social = Row()
+        social.add(google.render_web())
+        social.add(apple.render_web())
+        social.set_gap(12)
+
+        # ── Sign Up Prompt ────────────────────────────────────────────────────
+        let signup_text = Text("Don't have an account?")
+        signup_text.set_size(13)
+        signup_text.set_muted(True)
+
+        let signup_link = Link("Create one free", "#")
+        signup_link.on_click("showSignup()")
+
+        let signup = Row()
+        signup.add(signup_text.render_web())
+        signup.add(signup_link.render_web())
+        signup.set_gap(4)
+        signup.set_justify("center")
+
+        # ── Trust Badges ──────────────────────────────────────────────────────
+        let ssl_badge  = Badge("🛡 256-bit SSL", "#4f46e5")
+        let xp_badge   = Badge("📱 Cross-Platform", "#0891b2")
+        let ver_badge  = Badge("🚀 Mantra v0.5.0", "#059669")
+
+        let badges = Row()
+        badges.add(ssl_badge.render_web())
+        badges.add(xp_badge.render_web())
+        badges.add(ver_badge.render_web())
+        badges.set_gap(6)
+        badges.set_justify("center")
+
+        # ── Form Body ─────────────────────────────────────────────────────────
+        let form_body = Column()
+        form_body.add(email.render_web())
+        form_body.add(password.render_web())
+        form_body.add(options.render_web())
+        form_body.add(global_err.render_web())
+        form_body.add(sign_in.render_web())
+        form_body.add(divider.render_web())
+        form_body.add(social.render_web())
+        form_body.add(signup.render_web())
+        form_body.set_gap(16)
+
+        let form = Form("login-form")
+        form.add(form_body.render_web())
+
+        # ── Login Card ────────────────────────────────────────────────────────
+        let card = Card()
+        card.add(logo.render_web())
+        card.add(form.render_web())
+        card.add(badges.render_web())
+        card.set_elevation(3)
+        card.set_radius(20)
+
+        return card.render_web()
+
+    pub def build_android(self) -> String:
+        return self.build()
+
+    pub def build_ios(self) -> String:
+        return self.build()
+
+    # ─────────────────────────────────────────────────────────────────────────
+    # build_success() — success panel shown after login
+    # ─────────────────────────────────────────────────────────────────────────
+    pub def build_success(self, user_name: String) -> String:
+
+        # ── Celebration Icon ──────────────────────────────────────────────────
+        let icon = Icon("🎉", 52)
+
+        # ── Welcome Heading ───────────────────────────────────────────────────
+        let welcome = Heading("Welcome back!", 2)
+
+        # ── Signed-in User ────────────────────────────────────────────────────
+        let uname = Text(user_name)
+        uname.set_muted(True)
+        uname.set_size(13)
+
+        # ── Success Message ───────────────────────────────────────────────────
+        let msg = Text("You've successfully signed in with Mantra Widgets.")
+        msg.set_size(14)
+
+        # ── Platform Chips ────────────────────────────────────────────────────
+        let web_chip   = Chip("🌐 Web", "#4f46e5")
+        let ios_chip   = Chip("🍎 iOS", "#6366f1")
+        let droid_chip = Chip("🤖 Android", "#059669")
+
+        let chips = Row()
+        chips.add(web_chip.render_web())
+        chips.add(ios_chip.render_web())
+        chips.add(droid_chip.render_web())
+        chips.set_gap(8)
+        chips.set_justify("center")
+
+        # ── Sign Out Button ───────────────────────────────────────────────────
+        let logout = Button("Sign Out")
+        logout.set_variant("outline")
+        logout.on_click("handleLogout()")
+        logout.set_full_width(True)
+
+        # ── Content Column ────────────────────────────────────────────────────
+        let content = Column()
+        content.add(icon.render_web())
+        content.add(welcome.render_web())
+        content.add(uname.render_web())
+        content.add(msg.render_web())
+        content.add(chips.render_web())
+        content.add(logout.render_web())
+        content.set_gap(12)
+        content.set_align("center")
+
+        # ── Success Card ──────────────────────────────────────────────────────
+        let card = Card()
+        card.add(content.render_web())
+        card.set_elevation(3)
+        card.set_radius(20)
+        card.set_extra_class("mw-success-card")
+
+        return card.render_web()
+
+    pub def build_android(self) -> String:
+        return self.build()
+
+    pub def build_ios(self) -> String:
+        return self.build()
+
+    pub def run(self) -> Int:
+        print("🔐 LoginScreen — pure mantra_widgets OOP, zero HTML in screen code")
+        return 0

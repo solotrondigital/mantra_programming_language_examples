@@ -1,0 +1,17 @@
+[project]
+name = "movie_gql_service"
+org = "com.raghav"
+version = "0.1.0"
+type = "backend"
+service = "GRAPHQL"
+description = "Mantra GraphQL API backend application: movie_gql_service"
+entry = "src/main.mantra"
+
+[server]
+host = "0.0.0.0"
+port = 1672
+
+[dependencies]
+"mantra.web" = "0.5.0"
+"mantra.graphql" = "0.5.0"
+"mantra.sql.orm" = "0.5.0"

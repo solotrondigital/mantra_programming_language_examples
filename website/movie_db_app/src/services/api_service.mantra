@@ -1,0 +1,23 @@
+# Cross-Platform Network Service: REST (:1671) & GraphQL (:1672)
+from src.models.movie import Movie, Review
+
+class ApiService:
+    def __init__(self, rest_url: String = "http://localhost:1671", gql_url: String = "http://localhost:1672"):
+        self.rest_url = rest_url
+        self.gql_url = gql_url
+
+    def fetch_movies_rest(self) -> String:
+        # Calls GET http://localhost:1671/api/movies
+        return self.rest_url + "/api/movies"
+
+    def fetch_movie_detail_rest(self, movie_id: Int) -> String:
+        # Calls GET http://localhost:1671/api/movies/:id
+        return self.rest_url + "/api/movies/" + str(movie_id)
+
+    def query_movies_graphql(self) -> String:
+        # Calls POST http://localhost:1672/graphql with query { movies { id title genre } }
+        return self.gql_url + "/graphql?query={movies{id,title,genre,director}}"
+
+    def login_rest(self, username: String, password: String) -> String:
+        # Calls POST http://localhost:1671/api/auth/login
+        return self.rest_url + "/api/auth/login"

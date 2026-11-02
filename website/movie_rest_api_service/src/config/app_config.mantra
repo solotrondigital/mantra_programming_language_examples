@@ -1,0 +1,11 @@
+# Application Configuration
+
+class AppConfig:
+    def __init__(self):
+        self.env = "development"
+        self.host = "127.0.0.1"
+        self.port = 8080
+        self.log_level = "info"
+
+    def is_production(self) -> Bool:
+        return self.env == "production"

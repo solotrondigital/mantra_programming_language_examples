@@ -1,0 +1,5 @@
+# Request Logging Middleware
+
+class LoggerMiddleware:
+    def log_request(self, method: String, path: String) -> String:
+        return "[HTTP] " + method + " " + path

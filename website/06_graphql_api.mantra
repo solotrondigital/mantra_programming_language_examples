@@ -1,0 +1,41 @@
+# 06_graphql_api.mantra — Native GraphQL Server with SchemaBuilder
+import mantra.graphql.*
+
+class User:
+    def __init__(self, id: String, name: String, role: String):
+        self.id = id
+        self.name = name
+        self.role = role
+
+def main() -> Int:
+    print("========================================")
+    print("Mantra GraphQL Runtime Engine v0.5.0")
+    print("========================================")
+
+    # 1. Define schema with Query and Mutation operations
+    let schema = SchemaBuilder("Query")
+        .mutation("Mutation")
+        .resolver("Query", "user", def(ctx):
+            let uid = ctx.get_arg_str("id")
+            let u = User(uid, "Alice Smith", "Engineer")
+            return "{\"id\":\"" + u.id + "\",\"name\":\"" + u.name + "\",\"role\":\"" + u.role + "\"}"
+        )
+        .resolver("Mutation", "createUser", def(ctx):
+            let name = ctx.get_arg_str("name")
+            return "{\"id\":\"102\",\"name\":\"" + name + "\",\"role\":\"Developer\"}"
+        )
+        .build()
+
+    let engine = GraphQLEngine(schema)
+
+    # 2. Execute a typed GraphQL Query
+    let query = "query GetUser { user(id: \"42\") { id name role } }"
+    let response = engine.execute(query)
+    print("Query Response:")
+    print(response.to_json())
+
+    # 3. Export Schema Definition Language (SDL)
+    print("\nSchema Definition Language (SDL):")
+    print(schema.to_sdl())
+    return 0
+

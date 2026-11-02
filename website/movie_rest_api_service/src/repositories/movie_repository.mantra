@@ -1,0 +1,17 @@
+# Movie SQLite3 Repository
+import mantra.sql_orm.{Database}
+from src.models.movie import Movie
+from src.models.review import Review
+
+class MovieRepository:
+    def __init__(self, db: Database):
+        self.db = db
+
+    def find_all(self) -> List[Movie]:
+        return self.db.query("SELECT id, title, genre, release_year, director, synopsis FROM movies ORDER BY release_year DESC").many()
+
+    def find_by_id(self, movie_id: Int) -> Movie:
+        return self.db.query("SELECT id, title, genre, release_year, director, synopsis FROM movies WHERE id = ?").bind([movie_id]).first()
+
+    def find_reviews(self, movie_id: Int) -> List[Review]:
+        return self.db.query("SELECT r.id, r.movie_id, r.user_id, r.rating, r.body, u.username FROM reviews r JOIN users u ON u.id = r.user_id WHERE r.movie_id = ?").bind([movie_id]).many()

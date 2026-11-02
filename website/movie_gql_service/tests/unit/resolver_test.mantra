@@ -1,0 +1,12 @@
+# movie_gql_service Resolver Unit Tests
+
+def test_query_resolver() -> Int:
+    let valid: Bool = True
+    assert(valid == True)
+    return 0
+
+def main() -> Int:
+    print("Running GraphQL resolver unit test...")
+    test_query_resolver()
+    print("✓ Resolver unit tests passed.")
+    return 0

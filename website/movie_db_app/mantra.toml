@@ -1,0 +1,31 @@
+[project]
+name = "movie_db_app"
+org = "com.raghav"
+version = "0.1.0"
+type = "frontend"
+description = "Mantra cross-platform hybrid movie database application: movie_db_app"
+entry = "src/main.mantra"
+
+[platforms]
+ios = "platforms/ios"
+android = "platforms/android"
+web = "platforms/web"
+
+[web]
+port = 1670
+
+[android]
+org = "com.raghav"
+min_sdk = 24
+target_sdk = 34
+version_code = 1
+version_name = "1.0.0"
+
+[ios]
+bundle_id = "com.raghav.movie_db_app"
+deployment_target = "15.0"
+
+[dependencies]
+"mantra.web" = "0.5.0"
+"mantra.mobile" = "0.5.0"
+"mantra.sql.orm" = "0.5.0"

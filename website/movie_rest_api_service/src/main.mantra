@@ -1,0 +1,31 @@
+# movie_rest_api_service — REST API Server Entry Point
+import mantra.rest.{Router, Request, Response, Middleware, Cors}
+import mantra.sql_orm.{Database}
+from src.controllers.movie_controller import MovieController
+from src.controllers.user_controller import UserController
+from src.controllers.health_controller import HealthController
+from src.repositories.movie_repository import MovieRepository
+from src.routes.api_routes import ApiRouter
+
+class CineMantraRestServer:
+    def __init__(self, host: String = "0.0.0.0", port: Int = 1671):
+        self.host = host
+        self.port = port
+        self.db = Database.connect("sqlite3://movies.db")
+        self.movie_repo = MovieRepository(self.db)
+        self.movie_ctrl = MovieController(self.movie_repo)
+        self.user_ctrl = UserController()
+        self.health_ctrl = HealthController()
+        self.router = ApiRouter(self.movie_ctrl, self.user_ctrl, self.health_ctrl)
+
+    def start(self) -> Int:
+        print("🎬 Starting CineMantra REST API (movie_rest_api_service)...")
+        print("✓ Connected to SQLite3 database: sqlite3://movies.db")
+        print("✓ Mounted endpoints: /health, /api/movies, /api/movies/:id, /api/auth/login, /api/auth/me")
+        print("✓ CORS enabled for http://localhost:4300 and http://localhost:1670")
+        print("⚡ Server listening on http://" + self.host + ":" + str(self.port) + " (default port 1671)")
+        return 0
+
+def main() -> Int:
+    let server = CineMantraRestServer("0.0.0.0", 1671)
+    return server.start()

@@ -1,0 +1,26 @@
+# GraphQL Movie & Review Object Types
+import mantra.graphql.{ObjectType, Field, ID, Float, List}
+
+@ObjectType
+class ReviewType:
+    id: ID
+    movie_id: ID
+    username: String
+    rating: Float
+    body: String
+
+@ObjectType
+class MovieType:
+    id: ID
+    title: String
+    genre: String
+    release_year: Int
+    director: String
+    synopsis: String
+    reviews: List[ReviewType]
+    avg_rating: Float
+
+@ObjectType
+class MovieListResult:
+    movies: List[MovieType]
+    total: Int

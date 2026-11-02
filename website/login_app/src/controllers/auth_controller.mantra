@@ -1,0 +1,38 @@
+# Login App — Auth Controller
+# Orchestrates authentication actions (Login, Social Auth, Logout)
+# and coordinates state updates with AuthState.
+
+from src.state.app_state import AuthState
+
+pub class AuthController:
+    def __init__(self, state: AuthState):
+        self.state = state
+
+    pub def handle_login(self, email: String, pass_val: String) -> Bool:
+        self.state.set_email(email)
+        self.state.set_password(pass_val)
+
+        if not self.state.validate():
+            print("❌ Validation failed: " + self.state.error_message)
+            return False
+
+        print("🔐 Authenticating user: " + email)
+        let success = self.state.login()
+        if success:
+            print("✅ Login successful for: " + self.state.user_name)
+        return success
+
+    pub def handle_social_login(self, provider: String) -> Bool:
+        print("🌐 Initiating social OAuth flow with: " + provider)
+        self.state.set_email(provider + "_user@example.com")
+        self.state.user_name = provider + " User"
+        self.state.is_logged_in = True
+        self.state.error_message = ""
+        print("✅ Social login completed: " + self.state.user_name)
+        return True
+
+    pub def handle_logout(self):
+        print("🚪 Logging out user: " + self.state.user_name)
+        self.state.logout()
+        print("✓ Logged out successfully")
+

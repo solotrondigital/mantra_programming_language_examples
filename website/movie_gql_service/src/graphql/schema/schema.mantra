@@ -1,0 +1,9 @@
+# GraphQL Schema Representation
+
+class GraphQLSchema:
+    def __init__(self):
+        self.schema_definition = "docs/schema.graphql"
+        self.operation_count = 2
+
+    def get_operations(self) -> Int:
+        return self.operation_count

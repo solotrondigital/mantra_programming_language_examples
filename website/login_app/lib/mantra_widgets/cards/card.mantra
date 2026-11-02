@@ -1,0 +1,56 @@
+# Mantra Widgets — Card
+# Surface container with elevation, rounded corners, padding.
+# Use .add(widget.render_web()) to compose card content.
+
+pub class Card:
+    def __init__(self):
+        self._children = ""
+        self._elevation = 2
+        self._radius = 12
+        self._padding = 28
+        self._extra_class = ""
+
+    pub def add(self, child: String):
+        self._children = self._children + child
+
+    pub def set_elevation(self, elevation: Int):
+        self._elevation = elevation
+
+    pub def set_radius(self, radius: Int):
+        self._radius = radius
+
+    pub def set_padding(self, padding: Int):
+        self._padding = padding
+
+    # Used by framework to attach platform-specific style classes
+    pub def set_extra_class(self, class_name: String):
+        self._extra_class = class_name
+
+    pub def render_web(self) -> String:
+        let shadow_blur = str(self._elevation * 8)
+        let shadow_spread = str(self._elevation * 2)
+        mut extra = ""
+        if len(self._extra_class) > 0:
+            extra = " " + self._extra_class
+        return "<div class='mw-card" + extra + "' style='background:var(--mw-surface,#1e293b);border-radius:" + str(self._radius) + "px;padding:" + str(self._padding) + "px;border:1px solid var(--mw-border,#334155);box-shadow:0 " + shadow_blur + "px " + shadow_blur + "px -" + shadow_spread + "px rgba(0,0,0,0.3);box-sizing:border-box;width:100%;'>" + self._children + "</div>"
+
+    pub def render_android(self) -> String:
+        return "<com.google.android.material.card.MaterialCardView android:layout_width='match_parent' android:layout_height='wrap_content' app:cardCornerRadius='" + str(self._radius) + "dp' app:cardElevation='" + str(self._elevation * 2) + "dp'><LinearLayout android:layout_width='match_parent' android:layout_height='wrap_content' android:orientation='vertical' android:padding='" + str(self._padding) + "dp'>" + self._children + "</LinearLayout></com.google.android.material.card.MaterialCardView>"
+
+    pub def render_ios(self) -> String:
+        return "VStack { " + self._children + " }.padding(" + str(self._padding) + ").background(Color(.secondarySystemBackground)).cornerRadius(" + str(self._radius) + ").shadow(radius: " + str(self._elevation * 2) + ")"
+
+
+pub class StatisticsCard:
+    def __init__(self, title: String, value: String):
+        self._title = title
+        self._value = value
+
+    pub def render_web(self) -> String:
+        return "<div class='mw-stat-card' style='background:var(--mw-surface,#1e293b);padding:20px;border-radius:12px;border:1px solid var(--mw-border,#334155);'><div style='font-size:13px;color:var(--mw-muted,#94a3b8);font-weight:500;'>" + self._title + "</div><div style='font-size:26px;font-weight:700;color:var(--mw-text,#f1f5f9);margin-top:6px;'>" + self._value + "</div></div>"
+
+    pub def render_android(self) -> String:
+        return "<com.google.android.material.card.MaterialCardView android:layout_width='match_parent' android:layout_height='wrap_content'><LinearLayout android:orientation='vertical' android:padding='16dp'><TextView android:text='" + self._title + "'/><TextView android:text='" + self._value + "' android:textSize='24sp' android:textStyle='bold'/></LinearLayout></com.google.android.material.card.MaterialCardView>"
+
+    pub def render_ios(self) -> String:
+        return "VStack(alignment: .leading) { Text(\"" + self._title + "\").font(.caption); Text(\"" + self._value + "\").font(.title).bold() }.padding().background(Color(.secondarySystemBackground)).cornerRadius(12)"

@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <link rel="icon" type="image/png" href="../../../../../../../../../assets/images/mantra_color_logo.png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>login_app — Mantra Widgets</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        /* ─── Mantra Widgets Design System CSS Variables ─── */
+        :root {
+            --mw-primary:       #4f46e5;
+            --mw-primary-hover: #4338ca;
+            --mw-primary-light: rgba(79,70,229,0.12);
+            --mw-secondary:     #64748b;
+            --mw-success:       #10b981;
+            --mw-danger:        #ef4444;
+            --mw-warning:       #f59e0b;
+            --mw-bg:            #0f172a;
+            --mw-surface:       #1e293b;
+            --mw-surface-2:     #273349;
+            --mw-border:        #334155;
+            --mw-text:          #f1f5f9;
+            --mw-muted:         #94a3b8;
+            --mw-radius:        12px;
+            --mw-radius-sm:     8px;
+            --mw-radius-lg:     16px;
+        }
+
+        /* ─── Reset & Base ─── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--mw-bg);
+            color: var(--mw-text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ─── Background Decoration ─── */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -200px; left: -200px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(79,70,229,0.18) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            bottom: -200px; right: -200px;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        /* ─── Main Card ─── */
+        .mw-card {
+            background: var(--mw-surface);
+            border: 1px solid var(--mw-border);
+            border-radius: 20px;
+            padding: 40px 36px 32px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.04);
+            position: relative;
+            z-index: 1;
+            animation: mw-slide-up 0.45s cubic-bezier(0.34,1.56,0.64,1) both;
+        }
+        @keyframes mw-slide-up {
+            from { opacity: 0; transform: translateY(28px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0)     scale(1);    }
+        }
+
+        /* ─── Logo Block ─── */
+        .mw-logo-block { text-align: center; margin-bottom: 32px; }
+        .mw-logo-icon {
+            font-size: 40px; margin-bottom: 10px;
+            display: inline-block;
+            background: var(--mw-primary-light);
+            border-radius: 50%;
+            width: 72px; height: 72px;
+            line-height: 72px;
+        }
+        .mw-logo-title {
+            font-size: 26px; font-weight: 800;
+            color: var(--mw-text);
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }
+        .mw-logo-accent { color: var(--mw-primary); }
+        .mw-logo-sub {
+            font-size: 12px;
+            color: var(--mw-muted);
+        }
+
+        /* ─── Form ─── */
+        .mw-form { display: flex; flex-direction: column; gap: 18px; }
+
+        /* ─── Form Field ─── */
+        .mw-form-field { display: flex; flex-direction: column; gap: 6px; }
+        .mw-label { font-size: 13px; font-weight: 600; color: var(--mw-muted); letter-spacing: 0.2px; }
+
+        /* ─── Input Wrapper ─── */
+        .mw-input-wrapper {
+            display: flex;
+            align-items: center;
+            background: var(--mw-surface-2);
+            border: 1.5px solid var(--mw-border);
+            border-radius: var(--mw-radius-sm);
+            padding: 0 12px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            height: 46px;
+        }
+        .mw-input-wrapper:focus-within {
+            border-color: var(--mw-primary);
+            box-shadow: 0 0 0 3px var(--mw-primary-light);
+        }
+        .mw-input-wrapper.mw-error {
+            border-color: var(--mw-danger);
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
+        }
+        .mw-input-icon { font-size: 16px; margin-right: 10px; opacity: 0.6; flex-shrink: 0; }
+        .mw-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--mw-text);
+            font-size: 14px;
+            font-family: inherit;
+            width: 100%;
+        }
+        .mw-input::placeholder { color: var(--mw-muted); opacity: 0.6; }
+        .mw-input-action {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            opacity: 0.5;
+            padding: 4px;
+            margin-left: 4px;
+            transition: opacity 0.2s;
+            flex-shrink: 0;
+        }
+        .mw-input-action:hover { opacity: 0.9; }
+
+        /* ─── Error messages ─── */
+        .mw-field-error { font-size: 12px; color: var(--mw-danger); font-weight: 500; padding-left: 2px; }
+        .mw-global-error {
+            background: rgba(239,68,68,0.1);
+            border: 1px solid rgba(239,68,68,0.25);
+            border-radius: var(--mw-radius-sm);
+            color: #f87171;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 14px;
+            text-align: center;
+        }
+
+        /* ─── Options row ─── */
+        .mw-options-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+        .mw-checkbox-label { display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--mw-muted); user-select: none; }
+        .mw-checkbox {
+            width: 18px; height: 18px;
+            border: 2px solid var(--mw-border);
+            border-radius: 5px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s;
+            font-size: 11px; font-weight: 700; color: #fff;
+            flex-shrink: 0;
+        }
+        .mw-checkbox.checked { background: var(--mw-primary); border-color: var(--mw-primary); }
+        .mw-link { color: var(--mw-primary); text-decoration: none; font-weight: 600; font-size: 13px; }
+        .mw-link:hover { text-decoration: underline; }
+
+        /* ─── Buttons ─── */
+        .mw-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            height: 46px;
+            border-radius: var(--mw-radius-sm);
+            font-size: 14px; font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            border: none;
+            font-family: inherit;
+            letter-spacing: 0.2px;
+            position: relative;
+            overflow: hidden;
+        }
+        .mw-btn:active { transform: scale(0.98); }
+        .mw-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+        .mw-btn-primary {
+            background: var(--mw-primary);
+            color: #fff;
+            width: 100%;
+            box-shadow: 0 4px 14px rgba(79,70,229,0.35);
+        }
+        .mw-btn-primary:hover:not(:disabled) {
+            background: var(--mw-primary-hover);
+            box-shadow: 0 6px 20px rgba(79,70,229,0.45);
+            transform: translateY(-1px);
+        }
+        .mw-btn-outline {
+            background: transparent;
+            color: var(--mw-muted);
+            border: 1.5px solid var(--mw-border);
+            width: 100%;
+        }
+        .mw-btn-outline:hover { border-color: var(--mw-primary); color: var(--mw-primary); }
+        .mw-btn-social {
+            flex: 1;
+            background: var(--mw-surface-2);
+            color: var(--mw-text);
+            border: 1.5px solid var(--mw-border);
+            height: 42px;
+            font-weight: 600;
+        }
+        .mw-btn-social:hover { border-color: var(--mw-primary); background: var(--mw-primary-light); }
+
+        /* ─── Spinner ─── */
+        .mw-spinner {
+            width: 18px; height: 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: mw-spin 0.6s linear infinite;
+            display: none;
+        }
+        @keyframes mw-spin { to { transform: rotate(360deg); } }
+
+        /* ─── Divider ─── */
+        .mw-divider {
+            display: flex; align-items: center; gap: 12px;
+            color: var(--mw-muted); font-size: 12px;
+        }
+        .mw-divider::before, .mw-divider::after {
+            content: ""; flex: 1; height: 1px; background: var(--mw-border);
+        }
+
+        /* ─── Social Row ─── */
+        .mw-social-row { display: flex; gap: 12px; }
+
+        /* ─── Signup text ─── */
+        .mw-signup-text { text-align: center; font-size: 13px; color: var(--mw-muted); }
+
+        /* ─── Badges ─── */
+        .mw-badges {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            justify-content: center;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--mw-border);
+        }
+        .mw-badge {
+            background: var(--mw-surface-2);
+            border: 1px solid var(--mw-border);
+            border-radius: 9999px;
+            padding: 4px 12px;
+            font-size: 11px;
+            color: var(--mw-muted);
+            font-weight: 500;
+        }
+
+        /* ─── Success Card ─── */
+        .mw-success-card { text-align: center; }
+        .mw-success-icon { font-size: 52px; margin-bottom: 12px; display: block; }
+        .mw-success-title { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+        .mw-success-email {
+            font-size: 14px; color: var(--mw-primary); font-weight: 600;
+            background: var(--mw-primary-light);
+            border-radius: 9999px;
+            padding: 4px 14px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .mw-success-msg { font-size: 14px; color: var(--mw-muted); line-height: 1.6; margin-bottom: 24px; }
+        .mw-platform-pills { display: flex; justify-content: center; gap: 8px; margin-bottom: 28px; }
+        .mw-pill {
+            font-size: 12px; font-weight: 600; padding: 5px 14px;
+            border-radius: 9999px; border: 1.5px solid;
+        }
+        .mw-pill-web     { color: #38bdf8; border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.08); }
+        .mw-pill-ios     { color: #a78bfa; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.08); }
+        .mw-pill-android { color: #34d399; border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.08); }
+
+        /* ─── Version watermark ─── */
+        .mw-watermark {
+            position: fixed; bottom: 16px; right: 20px;
+            font-size: 11px; color: var(--mw-muted); opacity: 0.6;
+            z-index: 10;
+        }
+        .mw-watermark a { color: var(--mw-primary); text-decoration: none; }
+
+        /* ─── Mobile tweaks ─── */
+        @media (max-width: 480px) {
+            .mw-card { padding: 28px 20px 24px; }
+        }
+
+        /* ─── Keyframes for shimmer load animation ─── */
+        @keyframes mw-fade-in { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="mantra-root">
+        <!-- ─── LOGIN CARD ─── -->
+        <div class="mw-card" id="loginCard">
+
+            <!-- Logo -->
+            <div class="mw-logo-block">
+                <div class="mw-logo-icon">🔐</div>
+                <h1 class="mw-logo-title">login<span class="mw-logo-accent">_app</span></h1>
+                <p class="mw-logo-sub">Built with Mantra Widgets &bull; Cross-Platform UI</p>
+            </div>
+
+            <!-- Form -->
+            <form class="mw-form" onsubmit="return false;">
+
+                <!-- Email -->
+                <div class="mw-form-field">
+                    <label class="mw-label" for="email-input">Email Address</label>
+                    <div class="mw-input-wrapper" id="email-wrapper">
+                        <span class="mw-input-icon">✉️</span>
+                        <input id="email-input" class="mw-input" type="email"
+                               placeholder="name@example.com"
+                               autocomplete="email"
+                               oninput="onEmailInput(this.value)"/>
+                    </div>
+                    <div id="email-error" class="mw-field-error" style="display:none;"></div>
+                </div>
+
+                <!-- Password -->
+                <div class="mw-form-field">
+                    <label class="mw-label" for="pass-input">Password</label>
+                    <div class="mw-input-wrapper" id="pass-wrapper">
+                        <span class="mw-input-icon">🔑</span>
+                        <input id="pass-input" class="mw-input" type="password"
+                               placeholder="Min. 6 characters"
+                               autocomplete="current-password"
+                               oninput="onPasswordInput(this.value)"
+                               onkeydown="if(event.key==='Enter')handleLogin()"/>
+                        <button type="button" class="mw-input-action" onclick="togglePassword()" title="Show / hide password">👁</button>
+                    </div>
+                    <div id="pass-error" class="mw-field-error" style="display:none;"></div>
+                </div>
+
+                <!-- Remember me / Forgot -->
+                <div class="mw-options-row">
+                    <label class="mw-checkbox-label">
+                        <div class="mw-checkbox" id="rememberChk" onclick="toggleRemember(this)"></div>
+                        <span>Remember me</span>
+                    </label>
+                    <a class="mw-link" href="#" onclick="alert('Password reset coming soon!')">Forgot password?</a>
+                </div>
+
+                <!-- Global error -->
+                <div id="global-error" class="mw-global-error" style="display:none;"></div>
+
+                <!-- Submit -->
+                <button type="button" id="login-btn" class="mw-btn mw-btn-primary" onclick="handleLogin()">
+                    <span class="mw-spinner" id="login-spinner"></span>
+                    <span id="login-label">Sign In</span>
+                </button>
+
+                <!-- Divider -->
+                <div class="mw-divider"><span>or continue with</span></div>
+
+                <!-- Social -->
+                <div class="mw-social-row">
+                    <button type="button" class="mw-btn mw-btn-social" onclick="handleSocialLogin('Google')">
+                        <svg width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        <span>Google</span>
+                    </button>
+                    <button type="button" class="mw-btn mw-btn-social" onclick="handleSocialLogin('Apple')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                        </svg>
+                        <span>Apple</span>
+                    </button>
+                </div>
+
+                <!-- Sign up -->
+                <p class="mw-signup-text">Don't have an account?
+                    <a class="mw-link" href="#" onclick="handleSignup()">Create one free</a>
+                </p>
+
+            </form>
+
+            <!-- Bottom trust badges -->
+            <div class="mw-badges">
+                <span class="mw-badge">🛡 256-bit SSL</span>
+                <span class="mw-badge">📱 Cross-Platform</span>
+                <span class="mw-badge">🚀 Mantra v0.5.0</span>
+            </div>
+
+        </div>
+
+        <!-- ─── SUCCESS CARD (shown after login) ─── -->
+        <div class="mw-card mw-success-card" id="successCard" style="display:none;">
+            <span class="mw-success-icon">🎉</span>
+            <h2 class="mw-success-title">Welcome back!</h2>
+            <p class="mw-success-email" id="success-email"></p>
+            <p class="mw-success-msg">You've successfully signed in with <strong>Mantra Widgets</strong>.<br>
+                This cross-platform UI runs seamlessly on Web, iOS &amp; Android.</p>
+            <div class="mw-platform-pills">
+                <span class="mw-pill mw-pill-web">🌐 Web</span>
+                <span class="mw-pill mw-pill-ios">🍎 iOS</span>
+                <span class="mw-pill mw-pill-android">🤖 Android</span>
+            </div>
+            <button type="button" class="mw-btn mw-btn-outline" onclick="handleLogout()">Sign Out</button>
+        </div>
+    </div>
+
+    <!-- Version watermark -->
+    <div class="mw-watermark">
+        Powered by <a href="#">Mantra Widgets</a> v0.5.0
+    </div>
+
+    <script>
+        // ─── State ───────────────────────────────────────────────────────────
+        var state = {
+            email: "",
+            password: "",
+            showPassword: false,
+            remember: false,
+            loading: false
+        };
+
+        // ─── Input handlers ──────────────────────────────────────────────────
+        function onEmailInput(val) {
+            state.email = val.trim();
+            document.getElementById("email-error").style.display = "none";
+            document.getElementById("email-wrapper").classList.remove("mw-error");
+            document.getElementById("global-error").style.display = "none";
+        }
+
+        function onPasswordInput(val) {
+            state.password = val;
+            document.getElementById("pass-error").style.display = "none";
+            document.getElementById("pass-wrapper").classList.remove("mw-error");
+            document.getElementById("global-error").style.display = "none";
+        }
+
+        function togglePassword() {
+            state.showPassword = !state.showPassword;
+            var inp = document.getElementById("pass-input");
+            inp.type = state.showPassword ? "text" : "password";
+        }
+
+        function toggleRemember(el) {
+            state.remember = !state.remember;
+            el.classList.toggle("checked", state.remember);
+            el.textContent = state.remember ? "✓" : "";
+        }
+
+        // ─── Validation ──────────────────────────────────────────────────────
+        function validate() {
+            var ok = true;
+
+            var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRe.test(state.email)) {
+                showFieldError("email-wrapper", "email-error", "Please enter a valid email address.");
+                ok = false;
+            }
+
+            if (state.password.length < 6) {
+                showFieldError("pass-wrapper", "pass-error", "Password must be at least 6 characters.");
+                ok = false;
+            }
+
+            return ok;
+        }
+
+        function showFieldError(wrapperId, errorId, msg) {
+            document.getElementById(wrapperId).classList.add("mw-error");
+            var err = document.getElementById(errorId);
+            err.textContent = msg;
+            err.style.display = "block";
+        }
+
+        // ─── Login flow ──────────────────────────────────────────────────────
+        function handleLogin() {
+            if (state.loading) return;
+            document.getElementById("global-error").style.display = "none";
+
+            if (!validate()) return;
+
+            // Show loading state
+            state.loading = true;
+            var btn = document.getElementById("login-btn");
+            var spinner = document.getElementById("login-spinner");
+            var label = document.getElementById("login-label");
+            btn.disabled = true;
+            spinner.style.display = "block";
+            label.textContent = "Signing in...";
+
+            // Simulate async auth (replace with real Mantra bridge call)
+            setTimeout(function() {
+                state.loading = false;
+                btn.disabled = false;
+                spinner.style.display = "none";
+                label.textContent = "Sign In";
+
+                // Demo: accept any properly formatted credentials
+                showSuccessPanel(state.email);
+            }, 1200);
+        }
+
+        function handleSocialLogin(provider) {
+            var btn = event.currentTarget;
+            btn.disabled = true;
+            btn.innerHTML = '<div class="mw-spinner" style="display:block;border-top-color:var(--mw-primary);border-color:rgba(79,70,229,0.2);width:16px;height:16px;"></div>&nbsp;Connecting…';
+            setTimeout(function() {
+                showSuccessPanel(provider + " User");
+            }, 1000);
+        }
+
+        function showSignup() {
+            var ge = document.getElementById("global-error");
+            ge.textContent = "✨ Sign-up flow coming soon! For now try: demo@mantra.dev / mantra123";
+            ge.style.display = "block";
+        }
+
+        function showSuccessPanel(email) {
+            document.getElementById("loginCard").style.display = "none";
+            var sc = document.getElementById("successCard");
+            sc.style.display = "block";
+            sc.style.animation = "mw-slide-up 0.4s cubic-bezier(0.34,1.56,0.64,1) both";
+            document.getElementById("success-email").textContent = email;
+        }
+
+        function handleLogout() {
+            state.email = "";
+            state.password = "";
+            document.getElementById("email-input").value = "";
+            document.getElementById("pass-input").value = "";
+            document.getElementById("successCard").style.display = "none";
+            document.getElementById("loginCard").style.display = "block";
+        }
+
+        // ─── Platform Bridge (Mantra ↔ Web ↔ Android ↔ iOS) ─────────────────
+        window.MantraUI = {
+            emit: function(eventType, targetId, value) {
+                var payload = JSON.stringify({ event_type: eventType, target_id: targetId, value: value || null, timestamp_ms: Date.now() });
+                if (window.MantraAndroidBridge && typeof window.MantraAndroidBridge.postMessage === "function") {
+                    window.MantraAndroidBridge.postMessage(payload);
+                } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.mantraBridge) {
+                    window.webkit.messageHandlers.mantraBridge.postMessage(payload);
+                } else {
+                    window.dispatchEvent(new CustomEvent("mantra-event", { detail: payload }));
+                }
+            }
+        };
+
+        // Pre-fill demo credentials hint in console
+        console.info("%c🔐 login_app — Mantra Widgets Demo", "font-size:14px;font-weight:bold;color:#4f46e5;");
+        console.info("Try any email + password (min 6 chars) to see the login flow.");
+    </script>
+</body>
+</html>

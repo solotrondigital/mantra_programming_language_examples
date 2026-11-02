@@ -1,0 +1,17 @@
+[project]
+name = "movie_rest_api_service"
+org = "com.raghav"
+version = "0.1.0"
+type = "backend"
+service = "REST"
+description = "Mantra REST API backend application: movie_rest_api_service"
+entry = "src/main.mantra"
+
+[server]
+host = "0.0.0.0"
+port = 1671
+
+[dependencies]
+"mantra.web" = "0.5.0"
+"mantra.rest" = "0.5.0"
+"mantra.sql.orm" = "0.5.0"

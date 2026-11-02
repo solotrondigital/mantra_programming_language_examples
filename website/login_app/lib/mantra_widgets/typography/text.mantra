@@ -1,0 +1,136 @@
+# Mantra Widgets — Typography
+# Text, Heading, Link, Caption, Icon
+# All classes emit correct markup per platform — no HTML in screen code.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Text — body copy, captions, labels
+# ─────────────────────────────────────────────────────────────────────────────
+pub class Text:
+    def __init__(self, content: String):
+        self._content = content
+        self._id = ""
+        self._muted = False
+        self._bold = False
+        self._size = 14
+
+    pub def set_elem_id(self, elem_id: String):
+        self._id = elem_id
+
+    pub def set_muted(self, muted: Bool):
+        self._muted = muted
+
+    pub def set_bold(self, bold: Bool):
+        self._bold = bold
+
+    pub def set_size(self, size: Int):
+        self._size = size
+
+    pub def get_content(self) -> String:
+        return self._content
+
+    pub def render_web(self) -> String:
+        mut id_attr = ""
+        if len(self._id) > 0:
+            id_attr = " id='" + self._id + "'"
+        mut color = "var(--mw-text,#f1f5f9)"
+        if self._muted:
+            color = "var(--mw-muted,#94a3b8)"
+        mut weight = "400"
+        if self._bold:
+            weight = "600"
+        return "<p class='mw-text'" + id_attr + " style='font-size:" + str(self._size) + "px;color:" + color + ";font-weight:" + weight + ";margin:0;line-height:1.5;'>" + self._content + "</p>"
+
+    pub def render_android(self) -> String:
+        return "<TextView android:layout_width='wrap_content' android:layout_height='wrap_content' android:text='" + self._content + "' android:textSize='" + str(self._size) + "sp'/>"
+
+    pub def render_ios(self) -> String:
+        return "Text(\"" + self._content + "\").font(.body)"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Heading — h1–h6 semantic headings
+# ─────────────────────────────────────────────────────────────────────────────
+pub class Heading:
+    def __init__(self, content: String, level: Int):
+        self._content = content
+        self._level = level
+
+    pub def render_web(self) -> String:
+        mut tag = "h2"
+        mut size = "22px"
+        if self._level == 1:
+            tag = "h1"
+            size = "28px"
+        if self._level == 3:
+            tag = "h3"
+            size = "18px"
+        if self._level == 4:
+            tag = "h4"
+            size = "16px"
+        return "<" + tag + " class='mw-heading' style='font-size:" + size + ";font-weight:700;color:var(--mw-text,#f1f5f9);margin:0;line-height:1.2;'>" + self._content + "</" + tag + ">"
+
+    pub def render_android(self) -> String:
+        return "<TextView android:layout_width='wrap_content' android:layout_height='wrap_content' android:text='" + self._content + "' android:textAppearance='@style/TextAppearance.MaterialComponents.Headline5' android:textStyle='bold'/>"
+
+    pub def render_ios(self) -> String:
+        return "Text(\"" + self._content + "\").font(.title2).fontWeight(.bold)"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Link — anchor/navigation element
+# ─────────────────────────────────────────────────────────────────────────────
+pub class Link:
+    def __init__(self, label: String, href: String):
+        self._label = label
+        self._href = href
+        self._on_click = ""
+
+    pub def on_click(self, handler: String):
+        self._on_click = handler
+
+    pub def render_web(self) -> String:
+        mut click_attr = ""
+        if len(self._on_click) > 0:
+            click_attr = " onclick='" + self._on_click + "'"
+        return "<a class='mw-link' href='" + self._href + "'" + click_attr + " style='color:var(--mw-primary,#4f46e5);font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;'>" + self._label + "</a>"
+
+    pub def render_android(self) -> String:
+        return "<TextView android:text='" + self._label + "' android:textColor='@color/primary' android:textStyle='bold' android:layout_width='wrap_content' android:layout_height='wrap_content'/>"
+
+    pub def render_ios(self) -> String:
+        return "Button(\"" + self._label + "\") { " + self._on_click + " }.foregroundColor(.accentColor).font(.subheadline.weight(.medium))"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Icon — emoji or symbol displayed at a given size
+# ─────────────────────────────────────────────────────────────────────────────
+pub class Icon:
+    def __init__(self, symbol: String, size: Int):
+        self._symbol = symbol
+        self._size = size
+
+    pub def render_web(self) -> String:
+        return "<span class='mw-icon' style='font-size:" + str(self._size) + "px;display:inline-block;line-height:1;'>" + self._symbol + "</span>"
+
+    pub def render_android(self) -> String:
+        return "<TextView android:text='" + self._symbol + "' android:textSize='" + str(self._size) + "sp' android:gravity='center' android:layout_width='wrap_content' android:layout_height='wrap_content'/>"
+
+    pub def render_ios(self) -> String:
+        return "Text(\"" + self._symbol + "\").font(.system(size: " + str(self._size) + "))"
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Caption — small muted helper text
+# ─────────────────────────────────────────────────────────────────────────────
+pub class Caption:
+    def __init__(self, content: String):
+        self._content = content
+
+    pub def render_web(self) -> String:
+        return "<span class='mw-caption' style='font-size:12px;color:var(--mw-muted,#94a3b8);line-height:1.4;'>" + self._content + "</span>"
+
+    pub def render_android(self) -> String:
+        return "<TextView android:text='" + self._content + "' android:textAppearance='@style/TextAppearance.MaterialComponents.Caption'/>"
+
+    pub def render_ios(self) -> String:
+        return "Text(\"" + self._content + "\").font(.caption).foregroundColor(.secondary)"

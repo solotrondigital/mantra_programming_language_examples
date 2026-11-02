@@ -1,0 +1,5 @@
+# GraphQL Execution Logging Middleware
+
+class LoggingMiddleware:
+    def log_operation(self, operation_name: String) -> String:
+        return "[GraphQL Operation] " + operation_name

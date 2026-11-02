@@ -1,0 +1,64 @@
+# Mantra Widgets — Button
+# Variants: primary | secondary | outline | ghost | danger | success
+# Developers only set semantic properties — no HTML, no CSS, no inline styles.
+
+pub class Button:
+    def __init__(self, label: String):
+        self._label = label
+        self._id = ""
+        self._variant = "primary"
+        self._full_width = False
+        self._is_loading = False
+        self._is_disabled = False
+        self._on_click = ""
+        self._icon = ""
+
+    pub def set_elem_id(self, elem_id: String):
+        self._id = elem_id
+
+    # variant: primary | secondary | outline | ghost | danger | success
+    pub def set_variant(self, variant: String):
+        self._variant = variant
+
+    pub def set_full_width(self, full_width: Bool):
+        self._full_width = full_width
+
+    pub def set_loading(self, loading: Bool):
+        self._is_loading = loading
+
+    pub def set_disabled(self, disabled: Bool):
+        self._is_disabled = disabled
+
+    pub def set_icon(self, icon: String):
+        self._icon = icon
+
+    pub def on_click(self, handler: String):
+        self._on_click = handler
+
+    pub def render_web(self) -> String:
+        mut id_attr = ""
+        if len(self._id) > 0:
+            id_attr = " id='" + self._id + "'"
+        mut click_attr = ""
+        if len(self._on_click) > 0:
+            click_attr = " onclick='" + self._on_click + "'"
+        mut width_style = ""
+        if self._full_width:
+            width_style = "width:100%;"
+        mut disabled_attr = ""
+        if self._is_disabled:
+            disabled_attr = " disabled"
+        mut spinner_html = ""
+        if self._is_loading:
+            spinner_html = "<span class='mw-spinner'></span>"
+            disabled_attr = " disabled"
+        mut icon_html = ""
+        if len(self._icon) > 0:
+            icon_html = "<span class='mw-btn-icon'>" + self._icon + "</span>"
+        return "<button" + id_attr + " class='mw-btn mw-btn-" + self._variant + "'" + click_attr + disabled_attr + " type='button' style='" + width_style + "'>" + spinner_html + icon_html + self._label + "</button>"
+
+    pub def render_android(self) -> String:
+        return "<com.google.android.material.button.MaterialButton android:id='@+id/" + self._id + "' android:layout_width='match_parent' android:layout_height='wrap_content' android:text='" + self._label + "'/>"
+
+    pub def render_ios(self) -> String:
+        return "Button(\"" + self._label + "\") { " + self._on_click + " }.buttonStyle(.borderedProminent)"

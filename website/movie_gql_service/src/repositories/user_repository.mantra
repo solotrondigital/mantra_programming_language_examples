@@ -1,0 +1,5 @@
+# Data Access Repository
+
+class UserRepository:
+    def find_all(self) -> Int:
+        return 1

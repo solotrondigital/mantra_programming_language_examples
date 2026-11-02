@@ -1,0 +1,5 @@
+# GraphQL Context Authentication Middleware
+
+class AuthContextMiddleware:
+    def build_context(self, token: String) -> Bool:
+        return len(token) > 0

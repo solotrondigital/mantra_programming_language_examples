@@ -1,0 +1,10 @@
+# Global State Management Store
+
+class AppState:
+    def __init__(self):
+        self.counter = 0
+        self.dark_mode = False
+
+    def increment(self) -> Int:
+        self.counter = self.counter + 1
+        return self.counter

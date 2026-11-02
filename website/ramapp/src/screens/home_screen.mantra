@@ -1,0 +1,8 @@
+# Main Home Screen View
+
+class HomeScreen:
+    def __init__(self):
+        self.title = "Home"
+
+    def render_content(self) -> String:
+        return "Welcome to Mantra Hybrid Application"

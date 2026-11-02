@@ -1,0 +1,5 @@
+# GraphQL Root Mutation Resolver
+
+class MutationResolver:
+    def resolve_create_user(self, name: String, email: String) -> String:
+        return "{\"id\":\"usr_new\",\"name\":\"" + name + "\",\"email\":\"" + email + "\"}"

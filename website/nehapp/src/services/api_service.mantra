@@ -1,0 +1,8 @@
+# Cross-Platform Network Service
+
+class ApiService:
+    def __init__(self, base_url: String):
+        self.base_url = base_url
+
+    def get_endpoint(self, path: String) -> String:
+        return self.base_url + path

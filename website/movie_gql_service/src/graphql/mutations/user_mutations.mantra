@@ -1,0 +1,5 @@
+# User Mutation Operations
+
+class UserMutations:
+    def execute_create_user(self, name: String, email: String) -> String:
+        return "Executed mutation createUser(name: " + name + ")"

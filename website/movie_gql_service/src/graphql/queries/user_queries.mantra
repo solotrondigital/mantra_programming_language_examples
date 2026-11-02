@@ -1,0 +1,5 @@
+# User Query Operations
+
+class UserQueries:
+    def execute_get_user(self, id: String) -> String:
+        return "Executed query user(id: " + id + ")"

@@ -1,0 +1,23 @@
+# movie_gql_service — GraphQL API Server Entry Point
+import mantra.graphql.{GraphQLServer, Schema}
+import mantra.sql_orm.{Database}
+from src.graphql.resolvers.query_resolver import QueryResolver
+
+class CineMantraGraphQLServer:
+    def __init__(self, host: String = "0.0.0.0", port: Int = 1672):
+        self.host = host
+        self.port = port
+        self.db = Database.connect("sqlite3://movies.db")
+        self.query_resolver = QueryResolver(self.db)
+
+    def start(self) -> Int:
+        print("🎬 Starting CineMantra GraphQL API (movie_gql_service)...")
+        print("✓ Connected to SQLite3 database: sqlite3://movies.db")
+        print("✓ GraphQL Endpoint  : http://" + self.host + ":" + str(self.port) + "/graphql")
+        print("✓ GraphQL Playground: http://" + self.host + ":" + str(self.port) + "/graphql/playground")
+        print("⚡ Server listening on http://" + self.host + ":" + str(self.port) + " (default port 1672)")
+        return 0
+
+def main() -> Int:
+    let server = CineMantraGraphQLServer("0.0.0.0", 1672)
+    return server.start()

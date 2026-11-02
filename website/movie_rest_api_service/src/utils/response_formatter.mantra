@@ -1,0 +1,8 @@
+# JSON Response Envelope Formatter
+
+class ResponseFormatter:
+    def success(self, data_json: String) -> String:
+        return "{\"success\":true,\"data\":" + data_json + ",\"error\":null}"
+
+    def error(self, code: Int, message: String) -> String:
+        return "{\"success\":false,\"data\":null,\"error\":{\"code\":" + str(code) + ",\"message\":\"" + message + "\"}}"

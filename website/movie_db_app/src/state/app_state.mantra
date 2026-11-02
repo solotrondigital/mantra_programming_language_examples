@@ -1,0 +1,28 @@
+# Global State Management Store for CineMantra Hybrid App
+from src.models.movie import Movie, Review
+
+class UserSession:
+    def __init__(self, user_id: Int, username: String, token: String = ""):
+        self.user_id = user_id
+        self.username = username
+        self.token = token
+        self.is_authenticated = True
+
+class AppState:
+    def __init__(self):
+        self.current_user: UserSession = None
+        self.movies: List[Movie] = []
+        self.selected_movie_id: Int = 0
+        self.rest_api_url: String = "http://localhost:1671"
+        self.graphql_api_url: String = "http://localhost:1672"
+        self.dark_mode: Bool = True
+        self.active_tab: String = "movies"
+
+    def set_user(self, user: UserSession):
+        self.current_user = user
+
+    def logout(self):
+        self.current_user = None
+
+    def is_logged_in(self) -> Bool:
+        return self.current_user != None and self.current_user.is_authenticated

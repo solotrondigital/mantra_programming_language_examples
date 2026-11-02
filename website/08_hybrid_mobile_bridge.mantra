@@ -1,0 +1,32 @@
+# 08_hybrid_mobile_bridge.mantra — Hybrid Mobile Engine Architecture
+import mantra.mobile.*
+
+class AppBridge:
+    def __init__(self, platform: String):
+        self.platform = platform
+        self.active_session = True
+
+    pub def handle_native_event(self, event_name: String, payload: String):
+        print("[" + self.platform + "] Native lifecycle event: " + event_name)
+        if event_name == "onPause":
+            self.persist_state()
+
+    pub def persist_state(self):
+        print("[" + self.platform + "] Encrypted local storage flush complete.")
+
+def main() -> Int:
+    print("========================================")
+    print("Mantra Hybrid Mobile Engine v0.5.0")
+    print("========================================")
+
+    # Initialize bridges for Android or iOS host targets
+    let android_bridge = AppBridge("Android")
+    let ios_bridge = AppBridge("iOS")
+
+    android_bridge.handle_native_event("onResume", "{\"source\":\"launcher\"}")
+    android_bridge.handle_native_event("onPause", "{\"timestamp\":1761750000}")
+
+    ios_bridge.handle_native_event("sceneDidBecomeActive", "{}")
+    ios_bridge.handle_native_event("sceneWillResignActive", "{}")
+    return 0
+

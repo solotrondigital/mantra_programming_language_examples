@@ -1,0 +1,8 @@
+# Authentication Middleware
+
+class AuthMiddleware:
+    def __init__(self):
+        self.header_key = "Authorization"
+
+    def authenticate(self, token: String) -> Bool:
+        return len(token) > 0

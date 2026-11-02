@@ -1,0 +1,8 @@
+# Shared Domain Business Logic
+
+class UserService:
+    def __init__(self):
+        self.active_users = 1
+
+    def get_user_count(self) -> Int:
+        return self.active_users

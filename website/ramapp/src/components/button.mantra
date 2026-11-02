@@ -1,0 +1,9 @@
+# Reusable UI Button Component
+
+class Button:
+    def __init__(self, label: String):
+        self.label = label
+        self.is_enabled = True
+
+    def render(self) -> String:
+        return "<button enabled='" + str(self.is_enabled) + "'>" + self.label + "</button>"

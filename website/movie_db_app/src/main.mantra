@@ -1,0 +1,28 @@
+# movie_db_app — Hybrid Frontend Application Entry Point
+import mantra.web.{WebApp, Router, Request, Response, Html}
+import mantra.mobile.{Platform, NativeBridge}
+import mantra.sql_orm.{Database}
+from src.state.app_state import AppState, UserSession
+from src.screens.home_screen import HomeScreen
+from src.services.api_service import ApiService
+
+class CineMantraApp:
+    def __init__(self, port: Int = 1670):
+        self.port = port
+        self.app_state = AppState()
+        self.api_service = ApiService()
+        self.home_screen = HomeScreen(self.app_state)
+        self.db = Database.connect("sqlite3://movies.db")
+
+    def bootstrap(self) -> Int:
+        print("🎬 Starting CineMantra Hybrid Frontend (movie_db_app)...")
+        print("✓ Local SQLite3 Database connected: sqlite3://movies.db")
+        print("✓ Target platforms: iOS, Android, Web")
+        print("✓ Web Server listening on port " + str(self.port))
+        print("✓ Connected to REST backend: " + self.app_state.rest_api_url)
+        print("✓ Connected to GraphQL backend: " + self.app_state.graphql_api_url)
+        return 0
+
+def main() -> Int:
+    let app = CineMantraApp(1670)
+    return app.bootstrap()

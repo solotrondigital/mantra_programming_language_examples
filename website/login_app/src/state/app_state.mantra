@@ -1,0 +1,42 @@
+# Login App — State Management
+
+pub class AuthState:
+    def __init__(self):
+        self.email = ""
+        self.password = ""
+        self.is_loading = False
+        self.is_logged_in = False
+        self.error_message = ""
+        self.user_name = ""
+
+    pub def set_email(self, email: String):
+        self.email = email
+
+    pub def set_password(self, password: String):
+        self.password = password
+
+    pub def validate(self) -> Bool:
+        if len(self.email) < 5:
+            self.error_message = "Please enter a valid email address."
+            return False
+        if len(self.password) < 6:
+            self.error_message = "Password must be at least 6 characters."
+            return False
+        self.error_message = ""
+        return True
+
+    pub def login(self) -> Bool:
+        if not self.validate():
+            return False
+        self.is_loading = True
+        self.is_logged_in = True
+        self.user_name = self.email
+        self.is_loading = False
+        return True
+
+    pub def logout(self):
+        self.is_logged_in = False
+        self.email = ""
+        self.password = ""
+        self.user_name = ""
+        self.error_message = ""

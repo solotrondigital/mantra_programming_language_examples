@@ -1,0 +1,11 @@
+# User REST Controller
+
+class UserController:
+    def __init__(self):
+        self.resource_name = "users"
+
+    def get_users(self) -> String:
+        return "{\"users\":[{\"id\":\"usr_1\",\"name\":\"Alice\"}]}"
+
+    def create_user(self, name: String) -> String:
+        return "{\"success\":true,\"user\":{\"id\":\"usr_new\",\"name\":\"" + name + "\"}}"

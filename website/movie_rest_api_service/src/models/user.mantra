@@ -1,0 +1,11 @@
+# User Domain Model Entity
+
+class UserModel:
+    def __init__(self, id: String, name: String, email: String):
+        self.id = id
+        self.name = name
+        self.email = email
+        self.is_active = True
+
+    def to_json(self) -> String:
+        return "{\"id\":\"" + self.id + "\",\"name\":\"" + self.name + "\",\"email\":\"" + self.email + "\"}"

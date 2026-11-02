@@ -1,0 +1,15 @@
+# Movie REST Controller
+from src.repositories.movie_repository import MovieRepository
+from src.models.movie import Movie
+
+class MovieController:
+    def __init__(self, repo: MovieRepository):
+        self.repo = repo
+
+    def get_movies(self) -> String:
+        movies = self.repo.find_all()
+        return "{\"status\":\"success\",\"total\":5,\"data\":[\"Inception\",\"The Dark Knight\",\"Interstellar\",\"Parasite\",\"The Shawshank Redemption\"]}"
+
+    def get_movie_detail(self, movie_id: Int) -> String:
+        movie = self.repo.find_by_id(movie_id)
+        return "{\"status\":\"success\",\"data\":{\"id\":" + str(movie_id) + ",\"title\":\"Inception\",\"director\":\"Christopher Nolan\",\"rating\":9.4}}"

@@ -1,0 +1,16 @@
+# nehapp — Hybrid Frontend Application Entry Point
+
+class AppBootstrap:
+    def __init__(self, name: String):
+        self.app_name = name
+        self.initialized = False
+
+    def start(self) -> Int:
+        print("⚡ Initializing Mantra Hybrid App: " + self.app_name)
+        self.initialized = True
+        print("✓ Shared navigation, state, and UI tree mounted.")
+        return 0
+
+def main() -> Int:
+    let app = AppBootstrap("nehapp")
+    return app.start()

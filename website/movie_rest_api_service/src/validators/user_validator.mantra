@@ -1,0 +1,7 @@
+# User Input Validator
+
+class UserValidator:
+    def validate_create_input(self, name: String, email: String) -> Bool:
+        let valid_name: Bool = len(name) > 0
+        let valid_email: Bool = len(email) > 3
+        return valid_name and valid_email

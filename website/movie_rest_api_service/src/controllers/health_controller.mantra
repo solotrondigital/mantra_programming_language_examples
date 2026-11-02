@@ -1,0 +1,5 @@
+# Health Check Controller
+
+class HealthController:
+    def check(self) -> String:
+        return "{\"status\":\"UP\",\"service\":\"REST\",\"timestamp\":\"2026-10-29T00:00:00Z\"}"

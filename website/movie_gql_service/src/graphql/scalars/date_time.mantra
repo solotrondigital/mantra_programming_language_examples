@@ -1,0 +1,8 @@
+# Custom DateTime Scalar Parser & Serializer
+
+class DateTimeScalar:
+    def serialize(self, epoch_ms: Int) -> String:
+        return "2026-10-29T00:00:00.000Z"
+
+    def parse_value(self, iso_string: String) -> Bool:
+        return len(iso_string) > 10

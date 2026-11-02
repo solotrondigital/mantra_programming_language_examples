@@ -1,0 +1,12 @@
+# nehapp Application Root Component
+
+class Application:
+    def __init__(self, title: String):
+        self.title = title
+        self.version = "0.1.0"
+
+    def get_title(self) -> String:
+        return self.title
+
+    def render(self) -> String:
+        return "<App title='" + self.title + "'>"

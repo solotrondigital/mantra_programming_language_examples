@@ -1,0 +1,16 @@
+# CineMantra Main Home Screen View
+from src.models.movie import Movie, Review
+from src.state.app_state import AppState
+
+class HomeScreen:
+    def __init__(self, state: AppState):
+        self.title = "CineMantra — Movies & Reviews"
+        self.state = state
+
+    def render_movie_card(self, movie: Movie) -> String:
+        return "<div class='movie-card'><h3>" + movie.title + "</h3><p>" + movie.genre + " (" + str(movie.release_year) + ")</p><span>" + movie.director + "</span></div>"
+
+    def render_content(self) -> String:
+        if not self.state.is_logged_in():
+            return "<div class='auth-notice'>Please sign in with your CineMantra account to explore the database.</div>"
+        return "<div class='movie-grid'><h2>Featured Movies</h2><div class='list'>Connected to Mantra REST (:1671) & GraphQL (:1672)</div></div>"

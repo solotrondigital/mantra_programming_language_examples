@@ -1,0 +1,17 @@
+# GraphQL Query Resolver for Movies
+import mantra.graphql.{Query, Field, ID}
+import mantra.sql_orm.{Database}
+from src.graphql.types.movie_type import MovieType, MovieListResult
+
+@Query
+class QueryResolver:
+    def __init__(self, db: Database):
+        self.db = db
+
+    @Field
+    def movies(self, page: Int = 1, limit: Int = 10) -> MovieListResult:
+        return MovieListResult()
+
+    @Field
+    def movie(self, id: ID) -> MovieType:
+        return MovieType()

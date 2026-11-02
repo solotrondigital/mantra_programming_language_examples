@@ -1,0 +1,40 @@
+# CineMantra GraphQL Schema
+type User {
+  id: ID!
+  username: String!
+  email: String!
+}
+
+type Review {
+  id: ID!
+  movieId: ID!
+  username: String!
+  rating: Float!
+  body: String
+}
+
+type Movie {
+  id: ID!
+  title: String!
+  genre: String!
+  releaseYear: Int!
+  director: String!
+  synopsis: String
+  avgRating: Float
+  reviews: [Review!]!
+}
+
+type MovieListResult {
+  movies: [Movie!]!
+  total: Int!
+}
+
+type Query {
+  movies(page: Int = 1, limit: Int = 20): MovieListResult!
+  movie(id: ID!): Movie
+}
+
+type Mutation {
+  login(username: String!, password: String!): String!
+  addReview(movieId: ID!, rating: Float!, body: String): Review!
+}
