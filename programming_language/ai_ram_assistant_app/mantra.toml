@@ -7,10 +7,9 @@ description = "Mantra AI application: ai_ram_assistant_app"
 entry = "src/main.mantra"
 
 [dependencies]
-"mantra.ai" = "0.7.0"
-"mantra.util" = "0.7.0"
-"mantra.email" = "0.7.0"
-
+"mantra.ai" = "0.8.0"
+"mantra.util" = "0.8.0"
+"mantra.email" = "0.8.0"
 [email]
 server = "mail.solotrontech.com"
 port = 465

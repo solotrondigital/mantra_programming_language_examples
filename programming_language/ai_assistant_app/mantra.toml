@@ -8,8 +8,7 @@ entry = "src/main.mantra"
 
 
 [dependencies]
-mantra_ai = "0.7.0"
-
+mantra_ai = "0.8.0"
 [ai]
 default_provider = "openai"
 default_model = "assistant"
